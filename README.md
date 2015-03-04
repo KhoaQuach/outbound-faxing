@@ -26,3 +26,22 @@ a new dial out session to request outbound fax phone number, and attempts to
 deliver the fax.
 * Update the SUCCESS or FAILURE status in database, with detail error message
 if failure encounters.
+
+How to install and run:
+* This project requires a few component before it can be setup:
+    Freeswitch: please consult freeswitch.org website on how to download
+        and configure bare-bone Freeswitch system.
+    MySQL: database backend to keep track of all requests and status.
+    File conversion tools:
+* Clone the project from github
+    git clone https://github/KhoaQuach/outbound-faxing
+* Run the setup script, setup.sh; this script will attemp to setup the system
+to support outbound faxing.
+
+*** One important note: in order to dial out to send fax, I include a sample
+sip profile, callcentric.xml, which utilizes the callcentric voip provider to
+dial out and deliver the fax. Yours might be different so use it as reference
+and configure your own accordingly. If you support a lot of outbound sessions,
+you might need a sip trunk provider so the sip profile might be different as well.
+Please consult the Freeswitch document for more information.
+
