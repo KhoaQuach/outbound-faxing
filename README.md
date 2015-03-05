@@ -12,15 +12,21 @@ It's currently only running in Linux environment.
 
 How it works:
 * A client (web/mobile) would submit a outbound fax request.
-* A new record in the database would be created with the PENDING status.
+* A new record in the database would be added into fax file repository with
+NEW status.
 * A system cron job would launch a Python script every 30 seconds,
-which checks the database if there is/are new outbound fax in PENDING state.
-* If there is/are new outbound fax requests, another Python script will 
-attemp to convert the uploaded file to TIFF format; the uploaded file could be 
-in pdf, gif, jpeg, png formats. Sorry no doc format yet, because I use the
-open source library so have not figured it out to convert doc to tiff yet.
-* Build the appropriate outbound fax header template and combine the header
-and documents files into one big TIFF file.
+which checks the database if there is/are new fax file(s) in repository with 
+NEW state. 
+* If so above script would attempt to convert the file to TIFF format; 
+the uploaded file could be in pdf, gif, jpeg, png formats. Sorry no doc 
+format yet, because I use the open source library so have not figured it 
+out to convert doc to tiff yet.
+* If the file is converted successfully, it would insert into new table
+containing all the request with PENDING status.
+* Another Python script would be launched my cron job every 30 seconds,
+check if there is/are PENDING status records. it would build the appropriate 
+outbound fax header template and combine the header and documents files into 
+one big TIFF file.
 * Another Python script would connect to Freeswitch using socket, initiates
 a new dial out session to request outbound fax phone number, and attempts to
 deliver the fax.
