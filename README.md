@@ -11,7 +11,7 @@ The restful server, utilized Python flask framework, would provide
 the the mobile/web clients to submit the outbound request fax and query
 for job status.
 
-Support environments: Linux/Unix.
+Support environments: Linux/Unix. Python 2.7+.
 
 How it works:
 ============
@@ -46,6 +46,10 @@ How to install and run:
     - Flask framework:
     - Freeswitch: please consult freeswitch.org website on how to download
         and configure bare-bone Freeswitch system.
+        The python scripts utilize the library ESL.py modules so
+        make sure above file is installed and in your python path file; it
+        should be automatically included as part of python package
+        installation in most Linux distributions, I said most here...
     - MySQL: database backend to keep track of all requests and status.
     - File conversion tools:
 * Clone the project from github
