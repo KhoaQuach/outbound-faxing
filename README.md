@@ -50,8 +50,9 @@ How to install and run:
         make sure above file is installed and in your python path file; it
         should be automatically included as part of python package
         installation in most Linux distributions, I said most here...
-    - MySQL: database backend to keep track of all requests and status.
-    - File conversion tools: convert and imagematick library.
+    - MySQL: database backend to keep track of all requests and status; make
+        sure python-mysqldb is installed.
+    - File conversion tools: convert command and imagematick library.
 * Clone the project from github
     git clone https://github/KhoaQuach/outbound-faxing
 * Run the setup script, setup.sh; this script will attemp to setup the system
