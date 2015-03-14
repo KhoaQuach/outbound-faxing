@@ -5,6 +5,7 @@ ob_logger.py:
 """
 
 import logging
+import os
 
 # set up logging to file 
 logging.basicConfig(level=logging.DEBUG,
@@ -30,13 +31,13 @@ logger = logging.getLogger('outbound_faxes')
 
 def debug(msg):
     if __debug__:
-        logger.debug(msg)
+        logger.debug("(pid=" + str(os.getpid()) + ") " + msg)
 
 def error(msg):
-    logger.error(msg)
+    logger.error("(pid=" + str(os.getpid()) + ") " + msg)
 
 def info(msg):
-    logger.info(msg)
+    logger.info("(pid=" + str(os.getpid()) + ") " + msg)
 
 def warning(msg):
-    logger.warning(msg)
+    logger.warning("(pid=" + str(os.getpid()) + ") " + msg)

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
  
 """
-fssocket.py:
+fs_socket.py:
     Wrapper class to provide all the communication to and from Freeswitch; 
     this is used only for inbound socket which basically means the inbound 
     connection socket to Freeswitch server does not associate with any 
@@ -10,7 +10,7 @@ fssocket.py:
 
 import ESL
 
-class FSSocket:
+class FS_Socket:
 
     def __init__(self, host='127.0.0.1', port=8021, password='ClueCon'):
         self._host = str(host)
@@ -75,7 +75,7 @@ if __name__ == '__main__':
     test_phone_number = "18553922666"
     test_fax_file = "/tmp/test_fax.tiff"
 
-    conn = FSSocket('localhost', 8021, 'ClueCon')
+    conn = FS_Socket('localhost', 8021, 'ClueCon')
     print("Connected: ", conn.connected())
     if conn.connected():
         # Run a command
