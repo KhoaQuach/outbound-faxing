@@ -6,14 +6,28 @@ get_pending_faxes.py:
 """
 
 from db import DB
+import ob_logger
 
 conn = DB()
-rows = conn.select("select outbound_fax_id, destination_number, \
-    source_number, max_attempts, num_attempts, sleep_time, fax_file, \
-    fax_timestamp, fax_user_id, outbound_fax_status_id from outbound_faxes")
+rows = conn.select("select \
+    outbound_fax_id, \
+    destination_number, \
+    source_number, \
+    max_attempts, \
+    num_attempts, \
+    sleep_time, \
+    fax_file, \
+    fax_timestamp, \
+    fax_user_id, \
+    outbound_fax_status_id \
+    from outbound_faxes as obf \
+    where \
+        obf.outbound_fax_status_id = 0")
 
 if 0 < len(rows):
     #
     # Handle requests here
     #
-    pass
+    for r in rows:
+        ob_logger.debug(str(r))
+        

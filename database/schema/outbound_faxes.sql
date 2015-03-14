@@ -84,5 +84,5 @@ CREATE TABLE IF NOT EXISTS `outbound_fax_attempts` (
     PRIMARY KEY (`outbound_fax_attempt_id`) 
 );
 
+-- Create a database user to use for the service
 GRANT ALL ON `faxes`.* TO 'fax_user1'@'localhost' IDENTIFIED BY '97531';
-
