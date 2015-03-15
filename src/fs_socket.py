@@ -9,6 +9,16 @@ fs_socket.py:
 """
 
 import ESL
+import ob_global_vars
+
+__author__      = ob_global_vars.AUTHORS
+__copyright__   = ob_global_vars.COPYRIGHT
+__credits__     = ob_global_vars.CREDITS
+__license__     = ob_global_vars.LICENSE
+__version__     = ob_global_vars.VERSION
+__maintainer__  = ob_global_vars.MAINTAINER
+__email__       = ob_global_vars.EMAIL
+__status__      = ob_global_vars.STATUS
 
 class FS_Socket:
 
@@ -31,7 +41,14 @@ class FS_Socket:
         """
         self._conn.disconnect()
 
-    def sendApiCommand(self, api_command):
+    def filter_events(self, event_header, event_value_to_filter):
+        """
+            Filter so that only events that has a certain event header and 
+            the specified value are sent by Freeswitch to inbound socket
+        """
+        self._conn.filter(event_header, event_value_to_filter)
+
+    def send_api_command(self, api_command):
         """
             Send an API command to Freeswitch.
             Return a ESLEvent object upon success.  
@@ -39,7 +56,7 @@ class FS_Socket:
         """
         return self._conn.api(api_command)
 
-    def sendBgApiCommand(self, api_command, command_arguments='', uuid=''):
+    def send_bg_api_command(self, api_command, command_arguments='', uuid=''):
         """
             Send an API command to Freeswitch.
             This function will return right away with empty ESLEvent and the 
@@ -51,7 +68,7 @@ class FS_Socket:
         else:
             return self._conn.bgapi(api_command, command_arguments, uuid)
 
-    def sendDialPlanCommand(self, dialplan_command, command_arguments, \
+    def send_dialplan_command(self, dialplan_command, command_arguments, \
         uuid, aSync=False):
         """
             Send a dialplan command to Freeswitch.
@@ -66,6 +83,13 @@ class FS_Socket:
             return self._conn.execute(dialplan_command, command_arguments, \
                 uuid)
 
+    def subscribe_events(self, event_format, events):
+        """
+            Subscribe to what kind of events and event format we want to 
+            receive: plain/xml/json
+        """
+        self._conn.event(event_format, events)
+
 
 """
     Unit tests
@@ -79,14 +103,14 @@ if __name__ == '__main__':
     print("Connected: ", conn.connected())
     if conn.connected():
         # Run a command
-        e = conn.sendApiCommand("sofia status")
+        e = conn.send_api_command("sofia status")
         if e:
             print e.getBody()
 
         # Run another command
-        command = "originate sofia/gateway/" + gw_provider + "/" + test_phone_number + " &txfax('" + test_fax_file + "')"
+        command = "originate sofia/gateway/" + gw_provider + "/" + test_phone_number + " &txfax(" + test_fax_file + ")"
         print(command)
-        e = conn.sendApiCommand(command)
+        e = conn.send_api_command(command)
         if e:
             print e.getBody()
 

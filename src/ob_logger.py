@@ -6,15 +6,32 @@ ob_logger.py:
 
 import logging
 import os
+import ob_global_vars
 
-# set up logging to file 
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s %(name)-12s %(levelname)-8s %(message)s',
-                    datefmt='%m-%d %H:%M',
-                    filename='/tmp/outbound_faxes.log',
-                    filemode='a')
+__author__      = ob_global_vars.AUTHORS
+__copyright__   = ob_global_vars.COPYRIGHT
+__credits__     = ob_global_vars.CREDITS
+__license__     = ob_global_vars.LICENSE
+__version__     = ob_global_vars.VERSION
+__maintainer__  = ob_global_vars.MAINTAINER
+__email__       = ob_global_vars.EMAIL
+__status__      = ob_global_vars.STATUS
 
-# Handler which writes INFO messages or higher to the sys.stderr
+#
+# Set up logging to file if at least DEBUG level logging
+#
+FORMAT='%(asctime)s [%(CMDID)s] - %(message)s'
+logger=logging.getLogger("Outbound faxes")
+fh=logging.handlers.RotatingFileHandler("/tmp/outbound_faxes.log",maxBytes=1024000,backupCount=3)
+fh.setLevel(logging.DEBUG)
+fh.setFormatter(logging.Formatter(FORMAT))
+logger.addHandler(fh)
+logger.addFilter(ContextFilter())
+logger.warning("WTH")
+
+#
+# Writes INFO messages or higher to the sys.stderr
+#
 console = logging.StreamHandler()
 console.setLevel(logging.INFO)
 
@@ -26,8 +43,6 @@ console.setFormatter(formatter)
 
 # Add the handler to the root logger
 logging.getLogger('').addHandler(console)
-
-logger = logging.getLogger('outbound_faxes')
 
 def debug(msg):
     if __debug__:

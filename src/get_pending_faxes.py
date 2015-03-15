@@ -8,9 +8,22 @@ get_pending_faxes.py:
 from db import DB
 import ob_logger
 import ob_handler
+import ob_global_vars
 
-conn = DB()
-rows = conn.select("select \
+__author__      = ob_global_vars.AUTHORS
+__copyright__   = ob_global_vars.COPYRIGHT
+__credits__     = ob_global_vars.CREDITS
+__license__     = ob_global_vars.LICENSE
+__version__     = ob_global_vars.VERSION
+__maintainer__  = ob_global_vars.MAINTAINER
+__email__       = ob_global_vars.EMAIL
+__status__      = ob_global_vars.STATUS
+
+db_conn = DB(ob_global_vars.DB_HOST, ob_global_vars.DB_USERNAME, ob_global_vars.DB_PASSWORD, ob_global_vars.DB_NAME)
+
+# Get the list of pending requests
+rows = db_conn.select("START TRANSACTION; \
+    SELECT \
     outbound_fax_id, \
     destination_number, \
     source_number, \
@@ -19,9 +32,12 @@ rows = conn.select("select \
     sleep_time, \
     fax_file, \
     fax_user_id \
-    from faxes.outbound_faxes  \
-    where \
-        outbound_fax_status_id = 0")
+    FROM faxes.outbound_faxes \
+    WHERE \
+        outbound_fax_status_id = 0 FOR UPDATE;")
+
+# Change those request to in progress status
+db_conn.execute("UPDATE faxes.outbound_faxes SET faxes.outbound_fax_status_id = 1 WHERE faxes.outbound_fax_status_id = 0; COMMIT;")
 
 if 0 < len(rows):
     ob_logger.info("Entering " + __file__)    

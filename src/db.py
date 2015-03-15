@@ -6,6 +6,16 @@ db.py - wrapper class to provide all database interaction functions
 
 import MySQLdb as mdb
 import sys
+import ob_global_vars
+
+__author__      = ob_global_vars.AUTHORS
+__copyright__   = ob_global_vars.COPYRIGHT
+__credits__     = ob_global_vars.CREDITS
+__license__     = ob_global_vars.LICENSE
+__version__     = ob_global_vars.VERSION
+__maintainer__  = ob_global_vars.MAINTAINER
+__email__       = ob_global_vars.EMAIL
+__status__      = ob_global_vars.STATUS
 
 class DB:
 
