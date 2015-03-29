@@ -9,16 +9,16 @@ fs_socket.py:
 """
 
 import ESL
-import ob_global_vars
+import obf_global_vars
 
-__author__      = ob_global_vars.AUTHORS
-__copyright__   = ob_global_vars.COPYRIGHT
-__credits__     = ob_global_vars.CREDITS
-__license__     = ob_global_vars.LICENSE
-__version__     = ob_global_vars.VERSION
-__maintainer__  = ob_global_vars.MAINTAINER
-__email__       = ob_global_vars.EMAIL
-__status__      = ob_global_vars.STATUS
+__author__      = obf_global_vars.AUTHORS
+__copyright__   = obf_global_vars.COPYRIGHT
+__credits__     = obf_global_vars.CREDITS
+__license__     = obf_global_vars.LICENSE
+__version__     = obf_global_vars.VERSION
+__maintainer__  = obf_global_vars.MAINTAINER
+__email__       = obf_global_vars.EMAIL
+__status__      = obf_global_vars.STATUS
 
 class FS_Socket:
 

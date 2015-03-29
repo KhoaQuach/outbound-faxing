@@ -6,56 +6,58 @@ get_pending_faxes.py:
 """
 
 from db import DB
-import ob_logger
-import ob_handler
-import ob_global_vars
+import obf_logger
+import obf_handler
+import obf_global_vars
 
-__author__      = ob_global_vars.AUTHORS
-__copyright__   = ob_global_vars.COPYRIGHT
-__credits__     = ob_global_vars.CREDITS
-__license__     = ob_global_vars.LICENSE
-__version__     = ob_global_vars.VERSION
-__maintainer__  = ob_global_vars.MAINTAINER
-__email__       = ob_global_vars.EMAIL
-__status__      = ob_global_vars.STATUS
+__author__      = obf_global_vars.AUTHORS
+__copyright__   = obf_global_vars.COPYRIGHT
+__credits__     = obf_global_vars.CREDITS
+__license__     = obf_global_vars.LICENSE
+__version__     = obf_global_vars.VERSION
+__maintainer__  = obf_global_vars.MAINTAINER
+__email__       = obf_global_vars.EMAIL
+__status__      = obf_global_vars.STATUS
 
-db_conn = DB(ob_global_vars.DB_HOST, ob_global_vars.DB_USERNAME, ob_global_vars.DB_PASSWORD, ob_global_vars.DB_NAME)
+obf_logger.info("Entering " + __file__)    
 
-# Get the list of pending requests
-rows = db_conn.select("START TRANSACTION; \
-    SELECT \
-    outbound_fax_id, \
-    destination_number, \
-    source_number, \
-    max_attempts, \
-    num_attempts, \
-    sleep_time, \
-    fax_file, \
-    fax_user_id \
-    FROM faxes.outbound_faxes \
-    WHERE \
-        outbound_fax_status_id = 0 FOR UPDATE;")
+db_conn = DB(obf_global_vars.DB_HOST, obf_global_vars.DB_USERNAME, obf_global_vars.DB_PASSWORD, obf_global_vars.DB_NAME)
 
-# Change those request to in progress status
-db_conn.execute("UPDATE faxes.outbound_faxes SET faxes.outbound_fax_status_id = 1 WHERE faxes.outbound_fax_status_id = 0; COMMIT;")
+threads = []
 
-if 0 < len(rows):
-    ob_logger.info("Entering " + __file__)    
+while True:
 
-    #
-    # Handle requests here
-    #
-    threads = []
-    for r in rows:
-        ob_logger.debug(str(r))
+    # Get one pending request
+    rows = db_conn.execute_select("call get_pending_fax();")
+
+    if 0 < len(rows):
+
+        # Get only first row
+        row = rows[0]
+
+        # No more requests
+        if len(row) == 0 \
+            or row[0] is None \
+            or int(row[0]) <= 0:
+            break
+
+        obf_logger.debug(str(row))
+
+        #
+        # Handle requests here
+        #
 
         # Spawn a thread for each request
-        h = ob_handler.OB_Handler(r[0], r[1], r[2], r[3], r[4], r[5], r[6], r[7])
-        threads.append(h)
-        h.start()
-    
-    # Wait for all threads to complete
-    for t in threads:
-        t.join()
+        try:
+            h = obf_handler.OB_Handler(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7])
+            threads.append(h)
+            h.start()
+        except Exception, e:
+            obf_logger.error(e.message)
+            break
 
-    ob_logger.info("Exiting " + __file__)    
+# Wait for all threads to complete
+for t in threads:
+    t.join()
+
+obf_logger.info("Exiting " + __file__)    

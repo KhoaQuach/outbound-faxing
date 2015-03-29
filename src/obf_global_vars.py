@@ -1,5 +1,5 @@
 """
-ob_global_vars.py:
+obf_global_vars.py:
     Define the entire project variables or settings
 """
 
@@ -9,7 +9,7 @@ CREDITS             = ["Khoa Quach"]
 LICENSE             = "Apache"
 VERSION             = "0.1.0"
 MAINTAINER          = "Khoa Quach"
-EMAIL               = "kaquach@yahoo.com"
+EMAIL               = "obf@yahoo.com"
 STATUS              = "Production"
 
 FS_HOST             = "localhost"
@@ -23,3 +23,6 @@ DB_NAME             = "faxes"
 
 VOIP_GW             = "callcentric.com"
 
+ARCHIVED_DIR        = "/usr/local/obf"
+
+OBF_LOG_FILE        = "/tmp/obf.log"
